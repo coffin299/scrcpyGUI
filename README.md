@@ -83,6 +83,19 @@ Note that USB debugging is not required to run scrcpy in [OTG mode](doc/otg.md).
  - [macOS](doc/macos.md)
 
 
+## Windows GUI
+
+コマンドラインのオプションを画面から編集し、未入力の項目は従来どおり scrcpy
+の既定値のまま、`scrcpy` を起動するランチャーです。映像ウィンドウは scrcpy
+本体が開きます。
+
+```bat
+scrcpy-gui.bat
+```
+
+説明: [doc/gui.md](doc/gui.md) / [doc/gui.html](doc/gui.html)
+
+
 ## Must-know tips
 
  - [Reducing resolution](doc/video.md#size) may greatly improve performance

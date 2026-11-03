@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>scrcpy Windows GUI</title>
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0 auto;
+      max-width: 42rem;
+      padding: 2rem 1.25rem 4rem;
+      font: 16px/1.6 "Yu Gothic UI", "Segoe UI", sans-serif;
+      color: #1c1c1c;
+      background: #f7f7f5;
+    }
+    h1, h2 { line-height: 1.3; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+    h2 { font-size: 1.15rem; margin-top: 2rem; }
+    code, pre {
+      font-family: Consolas, "Cascadia Mono", monospace;
+      font-size: 0.92rem;
+    }
+    code { background: #eceae4; padding: 0.1rem 0.3rem; }
+    pre {
+      background: #222;
+      color: #f5f5f5;
+      padding: 0.8rem 1rem;
+      overflow-x: auto;
+    }
+    a { color: #0b57d0; }
+  </style>
+</head>
+<body>
+  <h1>scrcpy Windows GUI</h1>
+  <p>
+    コマンドラインのオプションを画面から編集し、未入力の項目は今までどおり
+    scrcpy の既定値のまま起動します。映像のウィンドウは scrcpy 本体が開きます。
+  </p>
+
+  <h2>起動</h2>
+  <p>リポジトリ直下で <code>scrcpy-gui.bat</code> を実行します。Python 3（Tk 付き）だけで動き、仮想環境や追加パッケージは要りません。</p>
+  <pre>scrcpy-gui.bat
+py -3 -m gui</pre>
+  <p>起動できないときは <code>%TEMP%\scrcpy-gui-error.txt</code> を見てください。scrcpy 自体の入れ方は <a href="windows.md">windows.md</a> です。</p>
+
+  <h2>画面でできること</h2>
+  <ul>
+    <li>接続、映像、音声、カメラ、操作、端末、ウィンドウ、録画、仮想ディスプレイ、詳細の各オプションを編集する</li>
+    <li>空欄・オフ・「指定しない」は引数にしない</li>
+    <li>無線接続と新しいディスプレイは「フラグのみ」と「値を指定」を選べる</li>
+    <li>完成したコマンドをその場で見て、コピーして起動する</li>
+    <li>端末一覧、アプリ、カメラ、ディスプレイ、エンコーダをログに出す</li>
+    <li>プロファイルを <code>%APPDATA%\scrcpyGUI\profiles</code> に保存する</li>
+  </ul>
+  <p>
+    接続先（シリアル / USB / TCP / 無線）は一つだけにしてください。
+    <code>-K</code> <code>-M</code> <code>-G</code> は、キーボード・マウス・ゲームパッドのモードで指定します。
+    V4L2 は Linux 専用の項目です。
+  </p>
+
+  <h2>起動と停止</h2>
+  <p>Ctrl+Enter で起動します。停止の 1 回目は scrcpy のウィンドウを閉じ、後始末を走らせます。ウィンドウが無いときと 2 回目はプロセスを強制終了します。</p>
+  <p>コンソール表示をオフにすると、取れた出力は画面下のログへ出ます。相対パスの録画ファイルは <code>scrcpy.exe</code> のフォルダに作られます。</p>
+
+  <h2>同じ内容の文書</h2>
+  <p>詳しくは <a href="gui.md">gui.md</a> を見てください。</p>
+</body>
+</html>

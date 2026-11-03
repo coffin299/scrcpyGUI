@@ -8,3 +8,5 @@ build/
 /x/
 local.properties
 /scrcpy-server
+__pycache__/
+*.py[cod]

@@ -97,3 +97,19 @@ Then just double-click on that file to run it.
 To start scrcpy without opening a terminal, double-click `scrcpy-noconsole.vbs`
 (note that errors won't be shown). To pass arguments, edit (a copy of)
 `scrcpy-noconsole.vbs` and add the desired arguments.
+
+## GUI launcher
+
+This repository also includes a Windows launcher that edits every scrcpy option
+in a window and starts `scrcpy` as the backend. Empty fields are omitted, so
+scrcpy keeps its usual defaults. The mirrored image still opens in scrcpy's own
+window.
+
+From the repository root:
+
+```bat
+scrcpy-gui.bat
+```
+
+See [gui.md](gui.md) (日本語) or [gui.html](gui.html). Python 3 with Tk is
+required (the standard Windows installer). No virtual environment is used.
