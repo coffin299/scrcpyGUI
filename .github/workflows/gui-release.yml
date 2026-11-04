@@ -1,6 +1,12 @@
 name: Release GUI
 
 on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "作成するタグ（例: v1.0.0）"
+        required: true
+        type: string
   push:
     tags:
       - "v*"
@@ -9,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: gui-release-${{ github.ref }}
+  group: gui-release-${{ github.event.inputs.tag || github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -18,6 +24,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Create tag
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          TAG: ${{ github.event.inputs.tag }}
+        run: |
+          set -euo pipefail
+          if ! [[ "${TAG}" =~ ^v[0-9A-Za-z._+-]+$ ]]; then
+            echo "タグは v1.0.0 の形にしてください: ${TAG}" >&2
+            exit 1
+          fi
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" >/dev/null 2>&1; then
+            echo "タグ ${TAG} は既にあります。ビルドと Release の更新だけ行います。"
+          else
+            git -c user.name="github-actions[bot]" \
+                -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+                tag -a "${TAG}" -m "scrcpy GUI ${TAG}"
+            git push origin "refs/tags/${TAG}"
+          fi
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -32,9 +61,14 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          INPUT_TAG: ${{ github.event.inputs.tag }}
         run: |
           set -euo pipefail
-          tag="${GITHUB_REF_NAME}"
+          if [ -n "${INPUT_TAG}" ]; then
+            tag="${INPUT_TAG}"
+          else
+            tag="${GITHUB_REF_NAME}"
+          fi
           asset="dist/scrcpy-gui-${tag}-windows-x64.exe"
           cp dist/scrcpy-gui.exe "${asset}"
           cat > release-notes.md << EOF
@@ -42,7 +76,7 @@ jobs:
 
           - \`scrcpy-gui-${tag}-windows-x64.exe\` を実行します。Python は不要です。
           - ミラー本体の scrcpy.exe は同梱していません。PATH、WinGet、Scoop、Chocolatey のいずれか、または画面の「参照」で指定します。
-          - このリリースは、\`v\` で始まるタグの push から作られています。
+          - タグは Actions の Release GUI から作成しています。
           EOF
           if gh release view "${tag}" >/dev/null 2>&1; then
             gh release upload "${tag}" "${asset}" --clobber

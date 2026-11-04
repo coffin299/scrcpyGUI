@@ -93,7 +93,7 @@ Note that USB debugging is not required to run scrcpy in [OTG mode](doc/otg.md).
 scrcpy-gui.bat
 ```
 
-`v` で始まるタグを push すると、Windows 用 exe が GitHub Release に載ります。
+Actions の **Release GUI** にタグ（例: `v1.0.0`）を入れて実行すると、ワークフローがタグを作り、Windows 用 exe を GitHub Release に載せます。
 説明: [doc/gui.md](doc/gui.md) / [doc/gui.html](doc/gui.html)
 
 
