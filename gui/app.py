@@ -5,6 +5,7 @@ import queue
 import shlex
 import shutil
 import subprocess
+import sys
 import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog, ttk
@@ -33,7 +34,6 @@ from gui.options_catalog import (
     SHORTCUTS,
 )
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UNSPECIFIED = "指定しない"
 OPTIONAL_LABELS = (
     (UNSPECIFIED, "off"),
@@ -1122,7 +1122,7 @@ class ScrcpyGui:
         dialog.wait_window()
 
     def _open_help(self):
-        path = os.path.join(ROOT, "doc", "gui.html")
+        path = os.path.join(resource_root(), "doc", "gui.html")
         if os.name == "nt" and os.path.isfile(path):
             os.startfile(path)
             return
@@ -1151,6 +1151,16 @@ class ScrcpyGui:
         except OSError as exc:
             messagebox.showerror("保存", str(exc), parent=self.root)
         self.root.destroy()
+
+
+def resource_root():
+    """説明ファイルを探す基準ディレクトリ。"""
+    meipass = getattr(sys, "_MEIPASS", "")
+    # PyInstaller で固めた exe は、同梱ファイルを一時フォルダへ展開する
+    if getattr(sys, "frozen", False) and meipass:
+        return meipass
+    # ソースから起動したときは、gui の一つ上がリポジトリ直下
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def main():

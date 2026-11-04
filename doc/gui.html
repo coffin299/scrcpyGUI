@@ -63,6 +63,11 @@ py -3 -m gui</pre>
   <p>Ctrl+Enter で起動します。停止の 1 回目は scrcpy のウィンドウを閉じ、後始末を走らせます。ウィンドウが無いときと 2 回目はプロセスを強制終了します。</p>
   <p>コンソール表示をオフにすると、取れた出力は画面下のログへ出ます。相対パスの録画ファイルは <code>scrcpy.exe</code> のフォルダに作られます。</p>
 
+  <h2>exe リリース</h2>
+  <p><code>v</code> で始まるタグを push すると、GitHub Actions が Windows 用 exe を作り、そのタグの Release に添付します。Python は不要です。scrcpy 本体は同梱しません。</p>
+  <pre>git tag v1.0.0
+git push origin v1.0.0</pre>
+
   <h2>同じ内容の文書</h2>
   <p>詳しくは <a href="gui.md">gui.md</a> を見てください。</p>
 </body>

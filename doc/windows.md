@@ -113,3 +113,7 @@ scrcpy-gui.bat
 
 See [gui.md](gui.md) (日本語) or [gui.html](gui.html). Python 3 with Tk is
 required (the standard Windows installer). No virtual environment is used.
+
+Pushing a tag that starts with `v` (for example `v1.0.0`) builds a
+Windows exe and attaches it to that GitHub Release. The native scrcpy
+executable is not bundled.

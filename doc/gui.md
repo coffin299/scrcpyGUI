@@ -18,6 +18,17 @@ Python 3（標準の Windows インストーラ。Tk を含む）が必要です
 
 起動できないときは `%TEMP%\scrcpy-gui-error.txt` を確認してください。
 
+## exe リリース
+
+`v` で始まるタグを手動で push すると、GitHub Actions が Windows 用 exe を作り、同じタグの GitHub Release に載せます。Python の入っていない PC では、その exe を使います。
+
+```bat
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+成果物の名前は `scrcpy-gui-v1.0.0-windows-x64.exe` です。scrcpy 本体は同梱しません。ワークフローは `.github/workflows/gui-release.yml` です。同じタグで再実行した場合は、exe だけ差し替えます。
+
 ## scrcpy 本体
 
 次の順で `scrcpy.exe` を探します。

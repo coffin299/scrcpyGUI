@@ -1,0 +1,53 @@
+name: Release GUI
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gui-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows-exe:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build exe
+        shell: pwsh
+        run: packaging/build_windows_exe.ps1
+
+      - name: Publish GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          asset="dist/scrcpy-gui-${tag}-windows-x64.exe"
+          cp dist/scrcpy-gui.exe "${asset}"
+          cat > release-notes.md << EOF
+          Windows 用の scrcpy GUI（${tag}）です。
+
+          - \`scrcpy-gui-${tag}-windows-x64.exe\` を実行します。Python は不要です。
+          - ミラー本体の scrcpy.exe は同梱していません。PATH、WinGet、Scoop、Chocolatey のいずれか、または画面の「参照」で指定します。
+          - このリリースは、\`v\` で始まるタグの push から作られています。
+          EOF
+          if gh release view "${tag}" >/dev/null 2>&1; then
+            gh release upload "${tag}" "${asset}" --clobber
+          else
+            gh release create "${tag}" "${asset}" \
+              --title "scrcpy GUI ${tag}" \
+              --notes-file release-notes.md
+          fi
